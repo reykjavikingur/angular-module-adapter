@@ -9,7 +9,7 @@ describe('parseFile', function() {
 
 	it('should call back with error when given path that does not exist', function(done) {
 		var path = __dirname + '/files/no-way-do-i-exist.js';
-		adapter.parseFile(path, function(err, tree) {
+		adapter.parseFile(path, function(err, modules) {
 			should(err).be.ok();
 			done();
 		});
@@ -17,13 +17,13 @@ describe('parseFile', function() {
 
 	describe('given path to file that exists and has valid code', function() {
 
-		var path, actualErr, actualTree;
+		var path, actualErr, actualModules;
 
 		beforeEach(function(done) {
 			path = __dirname + '/files/simple-app.js';
-			adapter.parseFile(path, function(err, tree) {
+			adapter.parseFile(path, function(err, modules) {
 				actualErr = err;
-				actualTree = tree;
+				actualModules = modules;
 				done();
 			});
 		});
@@ -32,10 +32,10 @@ describe('parseFile', function() {
 			should(actualErr).not.be.ok();
 		});
 
-		it('should call back with correct tree', function() {
-			should(actualTree).eql([{
-				moduleName: 'myApp',
-				instantiation: true
+		it('should call back with correct modules', function() {
+			should(actualModules).eql([{
+				name: 'myApp',
+				declaration: true
 			}]);
 		});
 
@@ -43,12 +43,12 @@ describe('parseFile', function() {
 
 	describe('given path to file containing non-angular code', function() {
 
-		var actualErr, actualTree;
+		var actualErr, actualModules;
 
 		beforeEach(function(done) {
-			adapter.parseFile(__dirname + '/files/vanilla.js', function(err, tree) {
+			adapter.parseFile(__dirname + '/files/vanilla.js', function(err, modules) {
 				actualErr = err;
-				actualTree = tree;
+				actualModules = modules;
 				done();
 			});
 		});
@@ -58,19 +58,19 @@ describe('parseFile', function() {
 		});
 
 		it('should call back with empty array', function() {
-			should(actualTree).eql([]);
+			should(actualModules).eql([]);
 		});
 
 	});
 
 	describe('given path to file containing invalid code', function() {
 
-		var actualErr, actualTree;
+		var actualErr, actualModules;
 
 		beforeEach(function(done) {
-			adapter.parseFile(__dirname + '/files/incomplete.js', function(err, tree) {
+			adapter.parseFile(__dirname + '/files/incomplete.js', function(err, modules) {
 				actualErr = err;
-				actualTree = tree;
+				actualModules = modules;
 				done();
 			});
 		});

@@ -18,61 +18,61 @@ describe('parseString', function() {
 
 	describe('given string with one angular module declaration', function() {
 
-		var string, tree;
+		var string, modules;
 
 		beforeEach(function() {
 			string = [
 				'angular.module("foo", [])'
 			].join('');
-			tree = adapter.parseString(string);
+			modules = adapter.parseString(string);
 		});
 
 		it('should return an array', function() {
-			should(tree).be.an.Array();
+			should(modules).be.an.Array();
 		});
 
 		it('should put one item in the array', function() {
-			should(tree.length).eql(1);
+			should(modules.length).eql(1);
 		});
 
 		it('should set the correct module name', function() {
-			should(tree[0].moduleName).eql('foo');
+			should(modules[0].name).eql('foo');
 		});
 
-		it('should set instantiation to true', function() {
-			should(tree[0].instantiation).eql(true);
+		it('should set declaration to true', function() {
+			should(modules[0].declaration).eql(true);
 		});
 
 	});
 
 	describe('given string with one angular service definition', function() {
 
-		var string, tree;
+		var string, modules;
 
 		beforeEach(function() {
 			string = [
 				'angular.module("foo").service("thing", function() {})'
 			].join('');
-			tree = adapter.parseString(string);
+			modules = adapter.parseString(string);
 		});
 
 		it('should return an Array with one item', function() {
-			should(tree.length).eql(1);
+			should(modules.length).eql(1);
 		});
 
 		it('should set the correct module name', function() {
-			should(tree[0].moduleName).eql('foo');
+			should(modules[0].name).eql('foo');
 		});
 
-		it('should set instantiation to false', function() {
-			should(tree[0].instantiation).eql(false);
+		it('should set declaration to false', function() {
+			should(modules[0].declaration).eql(false);
 		});
 
 	});
 
 	describe('given string with one angular module declaration and attached definitions', function() {
 
-		var string, tree;
+		var string, modules;
 
 		beforeEach(function() {
 			string = [
@@ -86,13 +86,13 @@ describe('parseString', function() {
 				'  }',
 				'})',
 			].join('\n');
-			tree = adapter.parseString(string);
+			modules = adapter.parseString(string);
 		});
 
-		it('should return the correct tree', function() {
-			should(tree).eql([{
-				moduleName: 'myApp',
-				instantiation: true
+		it('should return the correct modules', function() {
+			should(modules).eql([{
+				name: 'myApp',
+				declaration: true
 			}]);
 		});
 
@@ -100,31 +100,31 @@ describe('parseString', function() {
 
 	describe('given string with two angular module declarations', function() {
 
-		var string, tree;
+		var string, modules;
 
 		beforeEach(function() {
 			string = [
 				'angular.module("foo", []);',
 				'angular.module("bar", []);'
 			].join('\n');
-			tree = adapter.parseString(string);
+			modules = adapter.parseString(string);
 		});
 
 		it('should return array with two items', function() {
-			should(tree.length).eql(2);
+			should(modules.length).eql(2);
 		});
 
 		it('should set first item to correct values', function() {
-			should(tree[0]).eql({
-				moduleName: 'foo',
-				instantiation: true
+			should(modules[0]).eql({
+				name: 'foo',
+				declaration: true
 			});
 		});
 
 		it('should set second item to correct value', function() {
-			should(tree[1]).eql({
-				moduleName: 'bar',
-				instantiation: true
+			should(modules[1]).eql({
+				name: 'bar',
+				declaration: true
 			});
 		});
 
