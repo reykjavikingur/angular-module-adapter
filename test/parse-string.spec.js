@@ -45,6 +45,31 @@ describe('parseString', function() {
 
 	});
 
+	describe('given string with one angular module declaration and one dependency', function() {
+
+		var string, modules;
+
+		beforeEach(function() {
+			string = [
+				'angular.module("foo", ["bar"])'
+			].join('');
+			modules = adapter.parseString(string);
+		});
+
+		it('should have length 1', function() {
+			should(modules.length).eql(1);
+		});
+
+		it('should have correct name', function() {
+			should(modules[0].name).eql('foo');
+		});
+
+		it('should have correct declaration', function() {
+			should(modules[0].declaration).eql(true);
+		});
+
+	});
+
 	describe('given string with one angular service definition', function() {
 
 		var string, modules;
@@ -89,11 +114,16 @@ describe('parseString', function() {
 			modules = adapter.parseString(string);
 		});
 
-		it('should return the correct modules', function() {
-			should(modules).eql([{
-				name: 'myApp',
-				declaration: true
-			}]);
+		it('should return correct number of modules', function() {
+			should(modules.length).eql(1);
+		});
+
+		it('should set correct name', function() {
+			should(modules[0].name).eql('myApp');
+		});
+
+		it('should set correct declaration', function() {
+			should(modules[0].declaration).eql(true);
 		});
 
 	});
@@ -114,18 +144,20 @@ describe('parseString', function() {
 			should(modules.length).eql(2);
 		});
 
-		it('should set first item to correct values', function() {
-			should(modules[0]).eql({
-				name: 'foo',
-				declaration: true
-			});
+		it('should set correct first name', function() {
+			should(modules[0].name).eql('foo');
 		});
 
-		it('should set second item to correct value', function() {
-			should(modules[1]).eql({
-				name: 'bar',
-				declaration: true
-			});
+		it('should set correct first declaration', function() {
+			should(modules[0].declaration).eql(true);
+		});
+
+		it('should set correct second name', function() {
+			should(modules[1].name).eql('bar');
+		});
+
+		it('should set correct second declaration', function() {
+			should(modules[1].declaration).eql(true);
 		});
 
 	});
